@@ -1,0 +1,2 @@
+class HoldingsClientError(Exception):
+    pass
