@@ -9,6 +9,7 @@ pytest-mock = "*"
 
 [packages]
 requests = "*"
+marshmallow = "*"
 
 [requires]
 python_version = "3.7"
