@@ -22,7 +22,7 @@ def test_read_raises_exception_when_content_prefix_format_error(mocker):
         autospec=True,
         return_value=mocked_response(mocker, text='bla{}{}'.format(content, SUFFIX))
     )
-    with pytest.raises(HoldingsClientResponseFormatError) as err:
+    with pytest.raises(HoldingsDataFormatError) as err:
         read(holdings_url)
     assert "The response text does not start with the expected prefix" in str(err)
 
@@ -32,7 +32,7 @@ def test_read_raises_exception_when_content_prefix_format_error(mocker):
         autospec=True,
         return_value=mocked_response(mocker, text='{}{}bla'.format(PREFIX, content))
     )
-    with pytest.raises(HoldingsClientResponseFormatError) as err:
+    with pytest.raises(HoldingsDataFormatError) as err:
         read(holdings_url)
     assert "The response text does not end with the expected suffix" in str(err)
 

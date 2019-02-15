@@ -1,5 +1,5 @@
 class HoldingsClientError(Exception):
     pass
 
-class HoldingsClientResponseFormatError(Exception):
+class HoldingsDataFormatError(Exception):
     pass

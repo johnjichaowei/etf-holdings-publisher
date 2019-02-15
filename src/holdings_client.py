@@ -1,5 +1,5 @@
 import requests, json
-from src.exceptions import HoldingsClientError, HoldingsClientResponseFormatError
+from src.exceptions import HoldingsClientError, HoldingsDataFormatError
 
 CALLBACK_PARAM_VALUE = 'holdings_publisher'
 PREFIX = '{}(['.format(CALLBACK_PARAM_VALUE)
@@ -11,8 +11,8 @@ def read(holdings_url):
         raise HoldingsClientError(
             'Failed to retrieve holdings list, status_code {}'.format(response.status_code)
         )
-    if response.text.startswith(PREFIX) == False:
-        raise HoldingsClientResponseFormatError('The response text does not start with the expected prefix')
-    if response.text.endswith(SUFFIX) == False:
-        raise HoldingsClientResponseFormatError('The response text does not end with the expected suffix')
+    if not response.text.startswith(PREFIX):
+        raise HoldingsDataFormatError('The response text does not start with the expected prefix')
+    if not response.text.endswith(SUFFIX):
+        raise HoldingsDataFormatError('The response text does not end with the expected suffix')
     return json.loads(response.text[len(PREFIX):-len(SUFFIX)])
