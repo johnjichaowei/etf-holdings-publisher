@@ -1,5 +1,6 @@
 from .exceptions import HoldingsDataFormatError
 from .holding_schema import HoldingSchema
+from .holding import Holding
 import src.holdings_client
 
 HOLDINGS_KEY = 'sectorWeightStock'
@@ -12,4 +13,6 @@ def get(holdings_url):
         raise HoldingsDataFormatError('Holdings data format error: sectorWeightStock is not one list')
 
     schema = HoldingSchema()
-    return [schema.load(item) for item in holdings_data[HOLDINGS_KEY] if schema.validate(item) == {}]
+    return [
+        Holding(**schema.load(item)) for item in holdings_data[HOLDINGS_KEY] if schema.validate(item) == {}
+    ]

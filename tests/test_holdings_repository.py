@@ -1,4 +1,5 @@
 from src.holdings_repository import *
+from src.holding import Holding
 from decimal import Decimal
 import pytest
 
@@ -37,22 +38,22 @@ holdings_data = {
     "asOfDate": "2018-12-31T00:00:00-05:00",
     "sectorWeightStock": [holding_cba, holding_invalid, holding_bhp]
 }
-holding_cba_model = {
-    "holding_name": "Commonwealth Bank of Australia",
-    "holding_symbol": "CBA",
-    "holding_sector": "Diversified Banks",
+holding_cba_model = Holding(**{
+    "name": "Commonwealth Bank of Australia",
+    "symbol": "CBA",
+    "sector": "Diversified Banks",
     "market_val_percent": Decimal('8.25647'),
     "market_value": Decimal('1041683340.81'),
     "number_of_shares": Decimal('14389879')
-}
-holding_bhp_model = {
-    "holding_name": "BHP Group Ltd.",
-    "holding_symbol": "BHP",
-    "holding_sector": "Diversified Metals & Mining",
+})
+holding_bhp_model = Holding(**{
+    "name": "BHP Group Ltd.",
+    "symbol": "BHP",
+    "sector": "Diversified Metals & Mining",
     "market_val_percent": Decimal('6.52946'),
     "market_value": Decimal('823793522.37'),
     "number_of_shares": Decimal('24066419'),
-}
+})
 
 def test_get_calls_holdings_client(mocker):
     mocker.patch('src.holdings_client.read', autospec=True, return_value=holdings_data)
@@ -71,6 +72,6 @@ def test_get_raises_exception_when_sectorWeightStock_is_not_a_list_in_holdings_d
         get(holdings_url)
     assert "Holdings data format error: sectorWeightStock is not one list" in str(err)
 
-def test_get_returns_valid_holdings_as_a_list(mocker):
+def test_get_returns_valid_holding_models_as_a_list(mocker):
     mocker.patch('src.holdings_client.read', autospec=True, return_value=holdings_data)
     assert get(holdings_url) == [holding_cba_model, holding_bhp_model]

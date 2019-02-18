@@ -8,19 +8,19 @@ class HoldingSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
-    holding_name = fields.Str(required=True, data_key='holding')
-    holding_symbol = fields.Str(required=True, data_key='symbol')
-    holding_sector = fields.Str(data_key='sectorName')
+    name = fields.Str(required=True, data_key='holding')
+    symbol = fields.Str(required=True, data_key='symbol')
+    sector = fields.Str(data_key='sectorName')
     market_val_percent = fields.Decimal(data_key='marketValPercent')
     market_value = fields.Decimal(data_key='marketValue')
     number_of_shares = fields.Decimal(data_key='numberofshares')
 
-    @validates('holding_name')
-    def validate_holding_name(self, value):
+    @validates('name')
+    def validate_name(self, value):
         self.validate_non_empty_string(value, 'Holding name')
 
-    @validates('holding_symbol')
-    def validate_holding_symbol(self, value):
+    @validates('symbol')
+    def validate_symbol(self, value):
         self.validate_non_empty_string(value, 'Holding symbol')
 
     def validate_non_empty_string(self, value, field_name):
