@@ -13,6 +13,6 @@ def get(holdings_url):
         raise HoldingsDataFormatError('Holdings data format error: sectorWeightStock is not one list')
 
     schema = HoldingSchema()
-    return [
+    return (
         Holding(**schema.load(item)) for item in holdings_data[HOLDINGS_KEY] if schema.validate(item) == {}
-    ]
+    )

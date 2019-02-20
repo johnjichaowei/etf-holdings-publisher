@@ -74,4 +74,4 @@ def test_get_raises_exception_when_sectorWeightStock_is_not_a_list_in_holdings_d
 
 def test_get_returns_valid_holding_models_as_a_list(mocker):
     mocker.patch('src.holdings_client.read', autospec=True, return_value=holdings_data)
-    assert get(holdings_url) == [holding_cba_model, holding_bhp_model]
+    assert list(get(holdings_url)) == [holding_cba_model, holding_bhp_model]
