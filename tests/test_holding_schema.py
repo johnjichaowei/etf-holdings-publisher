@@ -69,3 +69,15 @@ def test_market_value_must_be_a_valid_number():
 
 def test_schema_excludes_unknown_field():
     assert HoldingSchema().unknown == EXCLUDE
+
+def test_dumps_can_serialize_the_data():
+    holding = {
+        "name": "Commonwealth Bank of Australia",
+        "symbol": "CBA",
+        "sector": "Diversified Banks",
+        "market_val_percent": Decimal('8.25647'),
+        "market_value": Decimal('1041683340.81'),
+        "number_of_shares": Decimal('14389879')
+    }
+    expected_json_str = '{"holding": "Commonwealth Bank of Australia", "symbol": "CBA", "sectorName": "Diversified Banks", "marketValPercent": "8.25647", "marketValue": "1041683340.81", "numberofshares": "14389879"}'
+    assert HoldingSchema().dumps(holding) == expected_json_str

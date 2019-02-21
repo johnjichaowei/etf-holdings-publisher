@@ -7,13 +7,14 @@ from marshmallow import Schema, fields, validates, ValidationError, EXCLUDE
 class HoldingSchema(Schema):
     class Meta:
         unknown = EXCLUDE
+        ordered = True
 
     name = fields.Str(required=True, data_key='holding')
     symbol = fields.Str(required=True, data_key='symbol')
     sector = fields.Str(data_key='sectorName')
-    market_val_percent = fields.Decimal(data_key='marketValPercent')
-    market_value = fields.Decimal(data_key='marketValue')
-    number_of_shares = fields.Decimal(data_key='numberofshares')
+    market_val_percent = fields.Decimal(data_key='marketValPercent', as_string=True)
+    market_value = fields.Decimal(data_key='marketValue', as_string=True)
+    number_of_shares = fields.Decimal(data_key='numberofshares', as_string=True)
 
     @validates('name')
     def validate_name(self, value):
