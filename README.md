@@ -1,4 +1,4 @@
-# holding-data-publisher
+# ETF Holdings Publisher
 A Lambda function to publish the holdings of one ETF found to SNS
 
 ## Setup project
