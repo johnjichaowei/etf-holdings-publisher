@@ -1,0 +1,6 @@
+[
+  {
+    "ParameterKey": "BucketName",
+    "ParameterValue": "etf-holdings-publisher-lambda-source-code"
+  }
+]
