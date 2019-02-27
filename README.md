@@ -3,6 +3,8 @@ A Lambda function to publish the holdings of one ETF found to SNS
 
 ## Setup project
 
+install python3.7
+
 ```
 python3 -m pip install --user --upgrade pip
 python3 -m pip install --user --upgrade pipenv
