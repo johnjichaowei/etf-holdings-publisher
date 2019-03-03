@@ -3,14 +3,12 @@ import os
 import zipfile
 import glob
 
-SOURCE_CODE_STACK_NAME = 'etf-holdings-publisher-source-code-stack'
-SOURCE_CODE_STACK_DIR = 'cloudformation/lambda_source_code_stack'
 LAMBDA_PACKAGE_PATH = 'dist/lambda.zip'
 VENV_SITE_PACKAGES_PATH = '.venv/lib/python3.7/site-packages'
 
 def create_lambda_package():
     print("Creating lambda package")
-    try: 
+    try:
         os.remove(LAMBDA_PACKAGE_PATH)
     except FileNotFoundError:
         pass
