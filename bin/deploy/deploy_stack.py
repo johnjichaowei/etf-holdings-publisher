@@ -1,13 +1,9 @@
-#!/usr/bin/env python3.7
 import os
 import json
 import boto3
 from botocore.exceptions import ClientError
 from time import sleep
 
-stack_name = 'etf-holdings-publisher-source-code-stack'
-template_file_path = "cloudformation/{stack_name}/template.yml".format(stack_name=stack_name)
-params_file_path = "cloudformation/{stack_name}/params.json".format(stack_name=stack_name)
 CFN_SUCCESS_STATES = [
     'CREATE_COMPLETE',
     'UPDATE_COMPLETE'
@@ -24,6 +20,9 @@ CFN_FAILURE_STATES = [
 STACK_MONITOR_INTERNAL = 3 # seconds
 
 def deploy_stack(stack_name, template_file_path, params_file_path):
+    print("Start to deploy stack {} with template file {} and params file {}".format(
+        stack_name, template_file_path, params_file_path
+    ))
     cfn = boto3.resource('cloudformation')
     payload = stack_payload(template_file_path, params_file_path)
     stack, last_stack_event = create_or_update_stack(cfn, stack_name, payload)
