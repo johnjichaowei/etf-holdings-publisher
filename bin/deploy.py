@@ -10,7 +10,7 @@ SOURCE_CODE_BUCKET_NAME = 'etf-holdings-publisher-lambda-source-code'
 SOURCE_CODE_OBJECT_KEY = 'etf-holdings-publisher-lambda.zip'
 TEMPLATE_FILE_PATH = "cloudformation/{stack_name}/template.yml"
 PARAMS_FILE_PATH = "cloudformation/{stack_name}/params.json"
-LAMBDA_STACK_NAME = 'eft-holdings-publisher-stack'
+LAMBDA_STACK_NAME = 'etf-holdings-publisher-stack'
 
 def deploy():
     print('\nCreating lambda package')
@@ -26,6 +26,13 @@ def deploy():
     print('\nUploading lambda package to S3')
     upload_lambda_package(
         LAMBDA_PACKAGE_PATH, SOURCE_CODE_BUCKET_NAME, SOURCE_CODE_OBJECT_KEY
+    )
+
+    print('\nDeploying the lambda function stack')
+    deploy_stack(
+        LAMBDA_STACK_NAME,
+        TEMPLATE_FILE_PATH.format(stack_name=LAMBDA_STACK_NAME),
+        PARAMS_FILE_PATH.format(stack_name=LAMBDA_STACK_NAME)
     )
 
 deploy()

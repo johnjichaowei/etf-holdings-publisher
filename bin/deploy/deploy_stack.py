@@ -77,8 +77,8 @@ def monitor_statck_deployment(stack, last_stack_event):
             break
         elif stack.stack_status in CFN_FAILURE_STATES:
             raise Exception(
-                'Deploy cloudformation stack {} failed - {}'.format(
-                    stack.stack_name, stack.status_reason
+                'Deploy cloudformation stack {} failed - {} - {}'.format(
+                    stack.stack_name, stack.stack_status, stack.stack_status_reason
                 )
             )
             break

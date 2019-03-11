@@ -1,0 +1,26 @@
+[
+  {
+    "ParameterKey": "SourceCodeS3Bucket",
+    "ParameterValue": "etf-holdings-publisher-lambda-source-code"
+  },
+  {
+    "ParameterKey": "SourceCodeS3Key",
+    "ParameterValue": "etf-holdings-publisher-lambda.zip"
+  },
+  {
+    "ParameterKey": "EtfHoldingsUrl",
+    "ParameterValue": "https://fake-url/"
+  },
+  {
+    "ParameterKey": "EtfHoldingsTopic",
+    "ParameterValue": "etf-holdings-topic"
+  },
+  {
+    "ParameterKey": "ScheduleExpression",
+    "ParameterValue": "cron(30 0 ? * SAT *)"
+  },
+  {
+    "ParameterKey": "ScheduleRuleName",
+    "ParameterValue": "etf-holdings-publisher-schedule-rule"
+  }
+]

@@ -17,5 +17,6 @@ def add_package_dependencies(package_file, dependencies_path):
     print("Adding package dependencies")
     os.environ['PIPENV_VENV_IN_PROJECT'] = '1'
     os.system('pipenv install')
-    [package_file.write(f) for f in glob.glob("{}/*/**".format(dependencies_path), recursive=True)]
+    for f in glob.glob("{}/**/*".format(dependencies_path), recursive=True):
+        package_file.write(f, f[len(dependencies_path)+1:])
     print("Package dependencies added")

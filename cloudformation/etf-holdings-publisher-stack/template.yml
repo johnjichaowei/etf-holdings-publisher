@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: the stack for the lambda function to publish the etf holdings to SNS
+
+Parameters:
+  SourceCodeS3Bucket:
+    Type: String
+    Description: Name of the S3 Bucket storing the lambda function's source code
+  SourceCodeS3Key:
+    Type: String
+    Description: Key of the lambda function's package file stored in S3 Bucket
+  EtfHoldingsUrl:
+    Type: String
+    Description: URL to retrieve the ETF holdings from
+  EtfHoldingsTopic:
+    Type: String
+    Description: Name of the SNS Topic to publish the retrieved ETF holdings to
+  ScheduleExpression:
+    Type: String
+    Description: Cron expression for the scheduling to run the lambda function 
+  ScheduleRuleName:
+    Type: String
+    Description: Name for the scheduling rule
+
+Resources:
+  LambdaFunc:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName: "etf-holdings-publisher-lambda"
+      Handler: "src.publisher.call"
+      Role:
+        Fn::GetAtt:
+          - "LambdaRole"
+          - "Arn"
+      Code:
+        S3Bucket: !Ref SourceCodeS3Bucket
+        S3Key: !Ref SourceCodeS3Key
+      Runtime: "python3.7"
+      Timeout: 300
+      TracingConfig:
+        Mode: "Active"
+      Environment:
+        Variables:
+          ETF_HOLDINGS_URL: !Ref EtfHoldingsUrl
+          HOLDINGS_PUBLISH_TOPIC_ARN: !Ref PublishTopic
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
+      Policies:
+        - PolicyName: "EtfHoldingsPublisherPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "SNS:Publish"
+                Resource: !Ref PublishTopic
+
+  PublishTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Ref EtfHoldingsTopic
+
+  ScheduleEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Scheduling event to trigger the lambda function
+      ScheduleExpression: !Ref ScheduleExpression
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt ["LambdaFunc", "Arn"]
+          Id: !Ref ScheduleRuleName
+
+  InvokeLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: "lambda:invokeFunction"
+      FunctionName: !GetAtt ["LambdaFunc", "Arn"]
+      Principal: "events.amazonaws.com"
+      SourceArn: !GetAtt ["ScheduleEventRule", "Arn"]
