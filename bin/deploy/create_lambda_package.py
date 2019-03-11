@@ -8,6 +8,10 @@ def create_lambda_package(package_path, dependencies_path):
         os.remove(package_path)
     except FileNotFoundError:
         pass
+    try: 
+        os.makedirs(os.path.dirname(package_path))
+    except FileExistsError:
+        pass
     with zipfile.ZipFile(package_path, 'w', zipfile.ZIP_DEFLATED) as package_file:
         [package_file.write(f) for f in glob.glob('src/**/*.py', recursive=True)]
         add_package_dependencies(package_file, dependencies_path)

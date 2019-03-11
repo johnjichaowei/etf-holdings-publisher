@@ -2,6 +2,7 @@
 from deploy.create_lambda_package import create_lambda_package
 from deploy.deploy_stack import deploy_stack
 from deploy.upload_lambda_package import upload_lambda_package
+from deploy.update_lambda_code import update_lambda_code
 
 LAMBDA_PACKAGE_PATH = 'dist/lambda.zip'
 VENV_SITE_PACKAGES_PATH = '.venv/lib/python3.7/site-packages'
@@ -11,6 +12,7 @@ SOURCE_CODE_OBJECT_KEY = 'etf-holdings-publisher-lambda.zip'
 TEMPLATE_FILE_PATH = "cloudformation/{stack_name}/template.yml"
 PARAMS_FILE_PATH = "cloudformation/{stack_name}/params.json"
 LAMBDA_STACK_NAME = 'etf-holdings-publisher-stack'
+LAMBDA_FUNC_NAME = 'etf-holdings-publisher-lambda'
 
 def deploy():
     print('\nCreating lambda package')
@@ -33,6 +35,13 @@ def deploy():
         LAMBDA_STACK_NAME,
         TEMPLATE_FILE_PATH.format(stack_name=LAMBDA_STACK_NAME),
         PARAMS_FILE_PATH.format(stack_name=LAMBDA_STACK_NAME)
+    )
+
+    print('\nUpdating lambda function code')
+    update_lambda_code(
+        LAMBDA_FUNC_NAME,
+        SOURCE_CODE_BUCKET_NAME,
+        SOURCE_CODE_OBJECT_KEY
     )
 
 deploy()
